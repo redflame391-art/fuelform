@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0B0B0F">
+  <meta name="description" content="Personal nutrition and performance tracker.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <title>FuelForm — Performance Nutrition</title>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">F</span><span>FUELFORM<small>PERFORMANCE NUTRITION</small></span></div>
+      <nav class="side-nav" aria-label="Main navigation">
+        <button class="nav-item active" data-page="home">◈ <span>Overview</span></button>
+        <button class="nav-item" data-page="food">＋ <span>Log food</span></button>
+        <button class="nav-item" data-page="history">▥ <span>History</span></button>
+        <button class="nav-item" data-page="weight">↗ <span>Weight</span></button>
+        <button class="nav-item" data-page="settings">⚙ <span>Settings</span></button>
+      </nav>
+      <div class="sidebar-foot"><span class="status-dot"></span> Personal tracker <small id="sync-label">Device storage</small></div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div><div class="eyebrow" id="today-label">DAILY PERFORMANCE</div><h1 id="page-title">Overview</h1></div>
+        <div class="top-actions"><span class="date-chip" id="date-chip"></span><button class="avatar" title="Profile">FF</button></div>
+      </header>
+      <section id="page-home" class="page active">
+        <div class="welcome-row"><div><h2>Fuel your progress.</h2><p>Consistent inputs. Better performance.</p></div><button class="primary" data-go="food">＋ Log food</button></div>
+        <div class="hero-grid">
+          <article class="card calorie-card">
+            <div class="card-top"><span class="muted">DAILY ENERGY</span><span class="pill purple">WEIGHT-LOSS PHASE</span></div>
+            <div class="calorie-main"><div><strong id="calories-eaten">0</strong><span>kcal eaten</span></div><div class="remaining"><strong id="calories-left">3,000</strong><span>kcal remaining</span></div></div>
+            <div class="progress-track big"><span id="calorie-bar"></span></div>
+            <div class="progress-labels"><span>0</span><span id="calorie-target-label">Target 3,000 kcal</span></div>
+            <div class="calorie-bottom"><span><i class="legend-dot"></i> Consumed</span><span id="calorie-percent">0% of daily target</span></div>
+          </article>
+          <article class="card weight-card">
+            <div class="card-top"><span class="muted">WEIGHT GOAL</span><span class="icon-tile">↘</span></div>
+            <div class="weight-numbers"><strong id="current-weight">99.0</strong><span>kg <small>current</small></span></div>
+            <div class="weight-track"><span id="weight-bar"></span></div>
+            <div class="weight-meta"><span>Goal <b id="goal-weight-label">90 kg</b></span><span id="weight-to-go">9 kg to go</span></div>
+            <button class="text-button" data-go="weight">Update weight →</button>
+          </article>
+        </div>
+        <div class="section-heading"><div><h3>Macro breakdown</h3><p>Daily targets built around training and recovery.</p></div><span class="subtle-tag">LIVE TOTALS</span></div>
+        <div class="macro-grid" id="macro-grid"></div>
+        <div class="lower-grid">
+          <article class="card meal-card"><div class="section-card-head"><div><h3>Today's meals</h3><p>Your five eating occasions</p></div><button class="text-button" data-go="food">＋ Add</button></div><div id="meal-list" class="meal-list"></div></article>
+          <article class="card hydration-card"><div class="section-card-head"><div><h3>Hydration</h3><p>Keep the engine running</p></div><span class="icon-tile">♧</span></div><div class="water-row"><strong id="water-total">0</strong><span>ml / <b id="water-target">2,500</b> ml</span></div><div class="progress-track"><span id="water-bar"></span></div><div class="water-actions"><button class="secondary" data-water="250">+250 ml</button><button class="secondary" data-water="500">+500 ml</button><button class="secondary" data-water="750">+750 ml</button></div><p class="micro-note">Set your own hydration target in Settings. Training and heat may increase needs.</p></article>
+        </div>
+      </section>
+      <section id="page-food" class="page">
+        <div class="welcome-row"><div><h2>Food log</h2><p>Log what you ate. Totals recalculate automatically.</p></div><span class="pill purple">MANUAL ENTRY</span></div>
+        <div class="two-col">
+          <form id="food-form" class="card form-card">
+            <h3>Add a food entry</h3>
+            <div class="field"><label for="food-name">Food or meal name</label><input id="food-name" required placeholder="e.g. Oats, banana & whey"></div>
+            <div class="form-row"><div class="field"><label for="food-meal">Eating occasion</label><select id="food-meal"><option>Breakfast</option><option>Morning snack</option><option>Lunch</option><option>Afternoon / pre-workout</option><option>Dinner / post-workout</option></select></div><div class="field"><label for="food-qty">Quantity / servings</label><input id="food-qty" type="number" min="0.01" step="0.01" value="1" required></div></div>
+            <div class="field"><label for="food-unit">Serving description</label><input id="food-unit" placeholder="e.g. 100 g, 1 bowl, 2 slices"></div>
+            <div class="nutrient-input-grid">
+              <div class="field"><label for="food-kcal">Calories (kcal)</label><input id="food-kcal" type="number" min="0" step="1" required placeholder="0"></div>
+              <div class="field"><label for="food-protein">Protein (g)</label><input id="food-protein" type="number" min="0" step="0.1" value="0" required></div>
+              <div class="field"><label for="food-carbs">Carbs (g)</label><input id="food-carbs" type="number" min="0" step="0.1" value="0" required></div>
+              <div class="field"><label for="food-fat">Fat (g)</label><input id="food-fat" type="number" min="0" step="0.1" value="0" required></div>
+              <div class="field"><label for="food-fiber">Fiber (g)</label><input id="food-fiber" type="number" min="0" step="0.1" value="0"></div>
+              <div class="field"><label for="food-sugar">Sugar (g)</label><input id="food-sugar" type="number" min="0" step="0.1" placeholder="Optional"></div>
+            </div>
+            <div class="field"><label for="food-notes">Notes (optional)</label><input id="food-notes" placeholder="Brand, ingredients, pre/post workout…"></div>
+            <button class="primary full" type="submit">＋ Add to daily log</button>
+            <p class="micro-note">Enter nutrition for the serving described. Quantity scales all values. Unknown nutrients are left blank, not assumed to be zero.</p>
+          </form>
+          <div class="stack">
+            <article class="card"><div class="section-card-head"><div><h3>Quick guidance</h3><p>Make logging more consistent.</p></div></div><ul class="guidance"><li>Use the product label when available.</li><li>Log oils, sauces and drinks when relevant.</li><li>Use the same units when comparing foods.</li><li>Photo estimates and barcode lookup are future integrations, not enabled in this version.</li></ul></article>
+            <article class="card"><div class="section-card-head"><div><h3>Today's entries</h3><p id="food-count">0 entries</p></div><button class="text-button" id="clear-day">Clear today</button></div><div id="food-entries" class="entry-list"></div></article>
+          </div>
+        </div>
+      </section>
+      <section id="page-history" class="page">
+        <div class="welcome-row"><div><h2>History</h2><p>Review your intake over time.</p></div><button class="secondary" id="export-csv">↓ Export CSV</button></div>
+        <div class="history-stats" id="history-stats"></div>
+        <article class="card"><div class="section-card-head"><div><h3>Recent daily intake</h3><p>Recorded entries only; missing days are not treated as zero intake.</p></div></div><div id="history-list" class="history-list"></div></article>
+      </section>
+      <section id="page-weight" class="page">
+        <div class="welcome-row"><div><h2>Weight tracking</h2><p>Follow the trend, not a single day's fluctuation.</p></div></div>
+        <div class="two-col">
+          <form id="weight-form" class="card form-card"><h3>Record weight</h3><div class="field"><label for="weight-date">Date</label><input type="date" id="weight-date" required></div><div class="field"><label for="weight-value">Weight (kg)</label><input type="number" id="weight-value" min="1" max="500" step="0.1" required placeholder="99.0"></div><button class="primary full">Save weight</button></form>
+          <article class="card"><div class="section-card-head"><div><h3>Weight records</h3><p>Use similar conditions for each weigh-in.</p></div></div><div id="weight-records" class="entry-list"></div></article>
+        </div>
+      </section>
+      <section id="page-settings" class="page">
+        <div class="welcome-row"><div><h2>Settings</h2><p>Adjust targets to your needs.</p></div></div>
+        <form id="settings-form" class="card form-card settings-form">
+          <h3>Profile & daily targets</h3>
+          <div class="form-row"><div class="field"><label for="setting-name">Display name</label><input id="setting-name" value="Athlete"></div><div class="field"><label for="setting-weight">Current weight (kg)</label><input id="setting-weight" type="number" min="1" step="0.1"></div></div>
+          <div class="form-row"><div class="field"><label for="setting-goal-weight">Goal weight (kg)</label><input id="setting-goal-weight" type="number" min="1" step="0.1"></div><div class="field"><label for="setting-water">Water target (ml)</label><input id="setting-water" type="number" min="250" step="250"></div></div>
+          <div class="form-row"><div class="field"><label for="setting-calories">Calories (kcal)</label><input id="setting-calories" type="number" min="500" step="50"></div><div class="field"><label for="setting-protein">Protein (g)</label><input id="setting-protein" type="number" min="0" step="5"></div></div>
+          <div class="form-row"><div class="field"><label for="setting-carbs">Carbohydrates (g)</label><input id="setting-carbs" type="number" min="0" step="5"></div><div class="field"><label for="setting-fat">Fat (g)</label><input id="setting-fat" type="number" min="0" step="5"></div></div>
+          <button class="primary" type="submit">Save settings</button>
+        </form>
+        <article class="card privacy-card"><h3>Storage & device sync</h3><p id="storage-description">This version stores records in this browser on this device. Clearing browser data can erase records. To sync between phone and desktop, connect a cloud database using the included setup guide and SQL schema.</p><span class="pill">LOCAL MODE</span></article>
+      </section>
+      <footer class="footer"><span>FUELFORM <span class="accent-text">/</span> BUILT FOR CONSISTENCY</span><span>Nutrition estimates are not medical advice.</span></footer>
+    </main>
+  </div>
+  <nav class="mobile-nav" aria-label="Mobile navigation">
+    <button class="active" data-page="home"><span>◈</span>Home</button><button data-page="food"><span>＋</span>Log</button><button data-page="history"><span>▥</span>History</button><button data-page="weight"><span>↗</span>Weight</button><button data-page="settings"><span>⚙</span>Settings</button>
+  </nav>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>

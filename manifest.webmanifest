@@ -1,0 +1,11 @@
+{
+  "name": "FuelForm — Performance Nutrition",
+  "short_name": "FuelForm",
+  "description": "Personal nutrition and performance tracker",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0B0B0F",
+  "theme_color": "#0B0B0F",
+  "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
